@@ -12,29 +12,21 @@ Get inverter detail `http://127.0.0.1:5000/inverter/192.168.20.119`
 
 ### Available Tags
 
-- `latest` - Latest build from main branch
 - `x.y.z` - Specific version releases (e.g., `1.0.0`, `1.2.3`)
-- `x.y` - Latest patch version for a minor release (e.g., `1.2`)
-- `x` - Latest minor version for a major release (e.g., `1`)
 
 ### Creating a New Release
 
 To create a new versioned release:
 
-1. Tag the commit with a semantic version:
+1. Create a GitHub release with a semantic version tag (e.g., v1.0.0) through the GitHub UI or GitHub CLI:
    ```bash
-   git tag v1.0.0
-   git push origin v1.0.0
+   gh release create v1.0.0 --generate-notes
    ```
 
 2. The GitHub Action will automatically:
-   - Create a GitHub release with release notes
-   - Build and push Docker images with version tags (e.g., `1.0.0`, `1.0`, `1`)
-
-Note: The `latest` tag is updated on every push to the main branch, whether from a regular commit or a tagged release.
+   - Build and push Docker image with the version tag (e.g., `1.0.0`)
 
 Example usage:
 ```bash
-docker pull czmavi/goodwe-web:latest
 docker pull czmavi/goodwe-web:1.0.0
 ```
