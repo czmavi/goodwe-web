@@ -24,7 +24,8 @@ jobs:
         id: version
         run: |
           if [[ "${{ github.ref }}" == refs/tags/* ]]; then
-            VERSION=${GITHUB_REF#refs/tags/v}
+            VERSION="${{ github.ref }}"
+            VERSION=${VERSION#refs/tags/v}
             echo "version=${VERSION}" >> $GITHUB_OUTPUT
             echo "is_release=true" >> $GITHUB_OUTPUT
           else
@@ -37,8 +38,16 @@ jobs:
             MAJOR=${version_parts[0]:-0}
             MINOR=${version_parts[1]:-0}
             PATCH=${version_parts[2]:-0}
+            # Validate numeric components
+            if ! [[ "$MAJOR" =~ ^[0-9]+$ ]] || ! [[ "$MINOR" =~ ^[0-9]+$ ]] || ! [[ "$PATCH" =~ ^[0-9]+$ ]]; then
+              echo "Warning: Non-numeric version components detected, resetting to 0.0.0"
+              MAJOR=0
+              MINOR=0
+              PATCH=0
+            fi
             PATCH=$((PATCH + 1))
-            VERSION="${MAJOR}.${MINOR}.${PATCH}-dev.${GITHUB_SHA::7}"
+            VERSION="${MAJOR}.${MINOR}.${PATCH}-dev.${{ github.sha }}"
+            VERSION="${VERSION:0:50}"  # Truncate if too long
             echo "version=${VERSION}" >> $GITHUB_OUTPUT
             echo "is_release=false" >> $GITHUB_OUTPUT
           fi
