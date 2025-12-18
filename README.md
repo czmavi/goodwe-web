@@ -29,8 +29,9 @@ To create a new versioned release:
 
 2. The GitHub Action will automatically:
    - Create a GitHub release with release notes
-   - Build and push Docker images with version tags
-   - Update the `latest` tag
+   - Build and push Docker images with version tags (e.g., `1.0.0`, `1.0`, `1`)
+
+Note: The `latest` tag is updated on every push to the main branch, whether from a regular commit or a tagged release.
 
 Example usage:
 ```bash
